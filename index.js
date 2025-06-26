@@ -48,3 +48,4 @@ const resultsContainer = document.getElementById("searchResults");
       resultsContainer.appendChild(item);
     });
   }
+  
