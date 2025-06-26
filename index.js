@@ -1,4 +1,4 @@
-const apiKey = "2eca7df3b0a36b8a5275092058befc94"; // Replace with your real TMDB key
+const apiKey = "2eca7df3b0a36b8a5275092058befc94"; 
 const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 const resultsContainer = document.getElementById("searchResults");

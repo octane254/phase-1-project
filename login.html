@@ -150,24 +150,21 @@ function getRedirectTarget() {
 
 document.getElementById('loginForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  // Here you would check credentials (this is just a demo)
-  // If login is successful:
+  
   window.location.href = getRedirectTarget();
 });
 
 document.getElementById('loginForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  // Get input values
+ 
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
-  // Store in localStorage (for demo purposes only, not secure for passwords)
+ 
   localStorage.setItem('loginUsername', username);
   localStorage.setItem('loginPassword', password);
 
-  // You can add authentication logic here if needed
 
-  // Redirect to the next page (replace 'dashboard.html' with your target page)
   window.location.href = 'index.html';
 });
 </script>
