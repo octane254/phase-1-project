@@ -13,6 +13,6 @@ Astryx is a sleek and modern web application designed to help users discover, re
 
 - **Frontend**: HTML, CSS, JavaScript
 - **Backend**: Node.js
-- **Database**: JSON files (if applicable)
+- **Database**: JSON files
 - **APIs**: TMDb API
 - **Version Control**: Git & GitHub
