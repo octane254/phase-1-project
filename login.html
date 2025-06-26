@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #000;
+      color: #d32f2f;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-container {
+      background: #000;
+      border: 2px solid #d32f2f;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(211,47,47,0.08);
+      padding: 32px 28px 24px 28px;
+      max-width: 350px;
+      width: 100%;
+      color: #d32f2f;
+      margin: 0 auto;
+    }
+    h2 {
+      color: #d32f2f;
+      margin-bottom: 24px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #d32f2f;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      border: 1.5px solid #d32f2f;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: #d32f2f;
+      background: #000;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #b71c1c;
+      outline: none;
+    }
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px 0;
+      background: #d32f2f;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+    button[type="submit"]:hover {
+      background: #b71c1c;
+      color: #fff;
+    }
+    .create-account {
+      text-align: center;
+      margin-top: 8px;
+      color: #d32f2f;
+      font-size: 0.97rem;
+    }
+    .create-account a {
+      color: #d32f2f;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 4px;
+      transition: text-decoration 0.2s;
+    }
+    .create-account a:hover {
+      text-decoration: underline;
+    }
+    .footer {
+      margin-top: 22px;
+      text-align: center;
+      color: #d32f2f;
+      font-size: 0.93rem;
+      letter-spacing: 0.5px;
+    }
+    #displayInfo h2 {
+      color: #d32f2f;
+      margin-bottom: 18px;
+    }
+    #displayInfo p {
+      color: #d32f2f;
+      font-size: 1rem;
+      margin: 10px 0;
+    }
+    #displayInfo strong {
+      color: #d32f2f;
+    }
+    @media (max-width: 480px) {
+      .login-container {
+      padding: 18px 8px 16px 8px;
+      max-width: 98vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <form id="loginForm" class="login-container" action="#" method="post">
+    <h2>Astryx FIM Login</h2>
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required autocomplete="username">
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required autocomplete="current-password">
+
+    <button type="submit">Login</button>
+    <div class="create-account">
+      Don't have an account?
+      <a href="#">Create one</a>
+    </div>
+    <div class="footer">
+      &copy; 2025 Astryx FIM Company
+    </div>
+  </form>
+  <div id="displayInfo" class="login-container" style="display:none; margin-top:20px;">
+    <h2>Login Details</h2>
+    <p><strong>Username:</strong> <span id="showUsername"></span></p>
+    <p><strong>Password:</strong> <span id="showPassword"></span></p>
+  </div>
+<script>
+
+function getRedirectTarget() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('redirect') || 'Dashboard.html';
+}
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  // Here you would check credentials (this is just a demo)
+  // If login is successful:
+  window.location.href = getRedirectTarget();
+});
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  // Get input values
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  // Store in localStorage (for demo purposes only, not secure for passwords)
+  localStorage.setItem('loginUsername', username);
+  localStorage.setItem('loginPassword', password);
+
+  // You can add authentication logic here if needed
+
+  // Redirect to the next page (replace 'dashboard.html' with your target page)
+  window.location.href = 'Dashboard.html';
+});
+</script>
+</body>
+</html>
