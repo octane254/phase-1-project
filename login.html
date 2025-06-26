@@ -145,7 +145,7 @@
 
 function getRedirectTarget() {
   const params = new URLSearchParams(window.location.search);
-  return params.get('redirect') || 'Dashboard.html';
+  return params.get('redirect') || 'index.html';
 }
 
 document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -168,7 +168,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
   // You can add authentication logic here if needed
 
   // Redirect to the next page (replace 'dashboard.html' with your target page)
-  window.location.href = 'Dashboard.html';
+  window.location.href = 'index.html';
 });
 </script>
 </body>

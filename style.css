@@ -1,11 +1,6 @@
-/* ================================
-   GOOGLE FONTS
-================================== */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&display=swap');
 
-/* ================================
-   RESET & BASE
-================================== */
+
 * {
   margin: 0;
   padding: 0;
@@ -23,9 +18,7 @@ body {
   transition: background 0.4s ease, color 0.4s ease;
 }
 
-/* ================================
-   DARK MODE
-================================== */
+
 body.light-mode {
   background-color: #f1f1f1;
   color: #111;
@@ -51,9 +44,7 @@ body.light-mode .movie-card {
   border: 1px solid #ddd;
 }
 
-/* ================================
-   NAVIGATION
-================================== */
+
 nav {
   background-color: #111;
   border-bottom: 2px solid #e50914;
@@ -138,9 +129,7 @@ nav {
   color: #fff;
 }
 
-/* ================================
-   HERO SECTION
-================================== */
+
 .hero {
   position: relative;
   height: 100vh;
@@ -191,9 +180,7 @@ nav {
   background: #ff1f29;
 }
 
-/* ================================
-   SECTIONS & ANIMATION
-================================== */
+
 section {
   padding: 4rem 2rem;
   max-width: 1200px;
@@ -211,9 +198,7 @@ section {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ================================
-   PORTFOLIO GRID
-================================== */
+
 .portfolio-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -247,9 +232,7 @@ section {
   color: #ccc;
 }
 
-/* ================================
-   SEARCH PAGE
-================================== */
+
 #search-results h2 {
   margin-bottom: 2rem;
   text-align: center;
@@ -284,9 +267,8 @@ section {
   color: #bbb;
 }
 
-/* ================================
-   CONTACT FORM
-================================== */
+
+
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -317,9 +299,8 @@ section {
   background: #ff1f29;
 }
 
-/* ================================
-   FOOTER
-================================== */
+
+
 footer {
   background-color: #111;
   text-align: center;
@@ -329,20 +310,20 @@ footer {
   color: #888;
 }
 
-/* ================================
-   MEDIA QUERIES
-================================== */
+
 @media (max-width: 768px) {
   .hero-content h1 {
-    font-size: 2.5rem;
+   font-size: 2.5rem;
   }
+
   .nav-menu {
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 1rem;
+   flex-direction: column;
+   gap: 0.5rem;
+   margin-top: 1rem;
   }
+
   nav {
-    flex-direction: column;
-    align-items: flex-start;
+   flex-direction: column;
+   align-items: flex-start;
   }
 }
