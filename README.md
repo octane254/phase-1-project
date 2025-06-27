@@ -7,7 +7,7 @@ Astryx is a sleek and modern web application designed to help users discover, re
 - 🔍 **Browse Movies**: Discover trending, popular, and top-rated films.
 - 🎞️ **Movie Details**: View information including synopsis, cast, trailers, and ratings.
 - 🗣️ **User Reviews**: Read and write reviews for any movie.
-- 🔎 **Search & Filter**: Easily find movies by title, genre, or release year.
+
 
 ### 🛠️ Tech Stack
 
