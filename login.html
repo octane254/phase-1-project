@@ -87,6 +87,7 @@
       font-weight: 600;
       margin-left: 4px;
       transition: text-decoration 0.2s;
+      cursor: pointer;
     }
     .create-account a:hover {
       text-decoration: underline;
@@ -110,17 +111,28 @@
     #displayInfo strong {
       color: #d32f2f;
     }
+    .error-message {
+      color: #ff5252;
+      background: #1a0000;
+      border-radius: 5px;
+      padding: 8px 10px;
+      margin-bottom: 14px;
+      text-align: center;
+      display: none;
+      font-size: 0.98rem;
+    }
     @media (max-width: 480px) {
       .login-container {
-      padding: 18px 8px 16px 8px;
-      max-width: 98vw;
+        padding: 18px 8px 16px 8px;
+        max-width: 98vw;
       }
     }
   </style>
 </head>
 <body>
-  <form id="loginForm" class="login-container" action="#" method="post">
+  <form id="loginForm" class="login-container" action="#" method="post" autocomplete="on">
     <h2>Login</h2>
+    <div id="errorMsg" class="error-message"></div>
     <label for="username">Username</label>
     <input type="text" id="username" name="username" required autocomplete="username">
 
@@ -130,42 +142,135 @@
     <button type="submit">Login</button>
     <div class="create-account">
       Don't have an account?
-      <a href="#">Create one</a>
+      <a href="#" id="createAccountLink">Create one</a>
     </div>
     <div class="footer">
       &copy; 2025 Astryx FILM Company
     </div>
   </form>
-  <div id="displayInfo" class="login-container" style="display:none; margin-top:20px;">
-    <h2>Login Details</h2>
-    <p><strong>Username:</strong> <span id="showUsername"></span></p>
-    <p><strong>Password:</strong> <span id="showPassword"></span></p>
-  </div>
-<script>
 
+  <form id="registerForm" class="login-container" style="display:none;">
+    <h2>Create Account</h2>
+    <div id="regErrorMsg" class="error-message"></div>
+    <label for="regUsername">Username</label>
+    <input type="text" id="regUsername" name="regUsername" required autocomplete="username">
+
+    <label for="regPassword">Password</label>
+    <input type="password" id="regPassword" name="regPassword" required autocomplete="new-password">
+
+    <label for="regConfirmPassword">Confirm Password</label>
+    <input type="password" id="regConfirmPassword" name="regConfirmPassword" required autocomplete="new-password">
+
+    <button type="submit">Register</button>
+    <div class="create-account">
+      Already have an account?
+      <a href="#" id="backToLoginLink">Login</a>
+    </div>
+    <div class="footer">
+      &copy; 2025 Astryx FILM Company
+    </div>
+  </form>
+
+<script>
 function getRedirectTarget() {
   const params = new URLSearchParams(window.location.search);
   return params.get('redirect') || 'index.html';
 }
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+// Show/hide forms
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const createAccountLink = document.getElementById('createAccountLink');
+const backToLoginLink = document.getElementById('backToLoginLink');
+const errorMsg = document.getElementById('errorMsg');
+const regErrorMsg = document.getElementById('regErrorMsg');
+
+createAccountLink.addEventListener('click', function(e) {
   e.preventDefault();
-  
-  window.location.href = getRedirectTarget();
+  loginForm.style.display = 'none';
+  registerForm.style.display = 'block';
+  errorMsg.style.display = 'none';
+  regErrorMsg.style.display = 'none';
 });
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+backToLoginLink.addEventListener('click', function(e) {
   e.preventDefault();
- 
-  const username = document.getElementById('username').value;
+  registerForm.reset();
+  loginForm.style.display = 'block';
+  registerForm.style.display = 'none';
+  errorMsg.style.display = 'none';
+  regErrorMsg.style.display = 'none';
+});
+
+// Registration logic (localStorage for demo)
+registerForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  regErrorMsg.style.display = 'none';
+
+  const username = document.getElementById('regUsername').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+  if (username.length < 3) {
+    regErrorMsg.textContent = 'Username must be at least 3 characters.';
+    regErrorMsg.style.display = 'block';
+    return;
+  }
+  if (password.length < 4) {
+    regErrorMsg.textContent = 'Password must be at least 4 characters.';
+    regErrorMsg.style.display = 'block';
+    return;
+  }
+  if (password !== confirmPassword) {
+    regErrorMsg.textContent = 'Passwords do not match.';
+    regErrorMsg.style.display = 'block';
+    return;
+  }
+
+  // Check if user exists
+  if (localStorage.getItem('user_' + username)) {
+    regErrorMsg.textContent = 'Username already exists.';
+    regErrorMsg.style.display = 'block';
+    return;
+  }
+
+  // Save user (for demo, password is stored in plain text)
+  localStorage.setItem('user_' + username, password);
+
+  // Switch to login form
+  registerForm.reset();
+  registerForm.style.display = 'none';
+  loginForm.style.display = 'block';
+  errorMsg.textContent = 'Account created! Please log in.';
+  errorMsg.style.display = 'block';
+});
+
+// Login logic
+loginForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  errorMsg.style.display = 'none';
+
+  const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value;
 
- 
+  const storedPassword = localStorage.getItem('user_' + username);
+
+  if (!storedPassword) {
+    errorMsg.textContent = 'User not found. Please register.';
+    errorMsg.style.display = 'block';
+    return;
+  }
+  if (storedPassword !== password) {
+    errorMsg.textContent = 'Incorrect password.';
+    errorMsg.style.display = 'block';
+    return;
+  }
+
+  // Save login info (for demo)
   localStorage.setItem('loginUsername', username);
-  localStorage.setItem('loginPassword', password);
 
-
-  window.location.href = 'index.html';
+  // Redirect
+  window.location.href = getRedirectTarget();
 });
 </script>
 </body>
