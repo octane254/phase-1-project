@@ -43,7 +43,7 @@ const resultsContainer = document.getElementById("searchResults");
         <img src="${poster}" alt="${movie.title}">
         <h3>${movie.title}</h3>
         <p>${movie.release_date || "No date"}</p>
-        <p>${movie.overview.slice(0, 100)}...</p>
+        <p>${movie.overview ? movie.overview.slice(0, 100) + "..." : "No overview available."}</p>
       `;
       resultsContainer.appendChild(item);
     });
