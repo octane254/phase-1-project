@@ -1,6 +1,6 @@
-### 🎬 Astryx - Film Discovery & Review Platform
+### 🎬 Astryx - Film & Review Platform
 
-Astryx is a sleek and modern web application designed to help users discover, review, and explore their favorite films. Built as a school project, Astryx showcases movie data,user reviews, and personalized recommendations in a user-friendly interface.
+Astryx is a sleek and modern web application designed to help users discover, review, and explore their favorite films. Built as a school project, Astryx showcases movie data, user reviews, and personalized recommendations in a user-friendly interface.
 
 ### 🚀 Features
 
