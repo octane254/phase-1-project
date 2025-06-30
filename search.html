@@ -7,23 +7,24 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <nav>
-  <div class="nav-left">
-    <a href="index.html"><img src="IMG_20250621_140818_866.jpg" alt="ASTRYX Logo" class="logo-img"></a>
-    <span class="logo-text">ASTRYX</span>
-  </div>
+    <div class="nav-left">
+      <a href="index.html"><img src="IMG_20250621_140818_866.jpg" alt="ASTRYX Logo" class="logo-img"></a>
+      <span class="logo-text">ASTRYX</span>
+    </div>
 
-  <ul class="nav-menu">
-  <li><a href="index.html">home</a></li>
-  <li><a href="search.html">search</a></li>
-  <li><a href="login.html">login</a></li>
-</ul>
+    <ul class="nav-menu">
+      <li><a href="index.html">home</a></li>
+      <li><a href="search.html">search</a></li>
+      <li><a href="login.html">login</a></li>
+    </ul>
 
-  <form class="nav-search-form" id="searchForm">
-    <input type="text" id="searchInput" placeholder="Search..." required />
-    <button type="submit">&#128269;</button>
-  </form>
-</nav>
+    <form class="nav-search-form" id="searchForm">
+      <input type="text" id="searchInput" placeholder="Search..." required />
+      <button type="submit">&#128269;</button>
+    </form>
+  </nav>
 
   <main>
     <h2 style="color:red; text-align:center;">Search Results</h2>
@@ -36,10 +37,10 @@
 
   <script>
     const apiKey = "2eca7df3b0a36b8a5275092058befc94";
+    const searchResults = document.getElementById("searchResults");
 
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get("q");
-
     if (query) searchMovies(query);
 
     async function searchMovies(query) {
@@ -49,16 +50,15 @@
         const data = await res.json();
         displayResults(data.results);
       } catch (err) {
-        document.getElementById("searchResults").innerHTML = "<p>Error loading results.</p>";
+        searchResults.innerHTML = "<p>Error loading results.</p>";
       }
     }
 
     function displayResults(movies) {
-      const container = document.getElementById("searchResults");
-      container.innerHTML = "";
+      searchResults.innerHTML = "";
 
       if (!movies.length) {
-        container.innerHTML = "<p>No results found.</p>";
+        searchResults.innerHTML = "<p>No results found.</p>";
         return;
       }
 
@@ -67,24 +67,79 @@
           ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
           : "https://via.placeholder.com/300x450?text=No+Image";
 
-        const movieEl = document.createElement("div");
-        movieEl.className = "portfolio-item";
-        movieEl.innerHTML = `
-          <img src="${poster}" alt="${movie.title}" />
+        const item = document.createElement("div");
+        item.className = "portfolio-item";
+        item.innerHTML = `
+          <img src="${poster}" alt="${movie.title}">
           <h3>${movie.title}</h3>
           <p>${movie.release_date || 'No release date'}</p>
-          <p>${movie.overview ? movie.overview.slice(0, 100) + '...' : 'No overview available.'}</p>
+          <p>${movie.overview ? movie.overview.slice(0, 100) + "..." : "No overview available."}</p>
+
+          <div class="review-section">
+            <h4>User Reviews</h4>
+            <ul class="review-list"></ul>
+
+            <form class="review-form" data-rating="0">
+              <div class="star-rating">
+                <span data-rating="1">★</span>
+                <span data-rating="2">★</span>
+                <span data-rating="3">★</span>
+                <span data-rating="4">★</span>
+                <span data-rating="5">★</span>
+              </div>
+              <input type="text" placeholder="Write a review..." required />
+              <button type="submit">Submit</button>
+            </form>
+          </div>
         `;
-        container.appendChild(movieEl);
+        searchResults.appendChild(item);
       });
     }
 
-    const form = document.getElementById("searchForm");
-    form.addEventListener("submit", function (e) {
+    // Redirect with query on form submit
+    document.getElementById("searchForm").addEventListener("submit", function (e) {
       e.preventDefault();
       const input = document.getElementById("searchInput").value.trim();
       if (input) {
         window.location.href = `search.html?q=${encodeURIComponent(input)}`;
+      }
+    });
+
+    // Handle review interactions (stars, submit, delete)
+    document.addEventListener("click", (e) => {
+      if (e.target.matches(".star-rating span")) {
+        const stars = e.target.parentElement.querySelectorAll("span");
+        const rating = Number(e.target.dataset.rating);
+        stars.forEach((star, i) => {
+          star.classList.toggle("selected", i < rating);
+        });
+        e.target.closest("form").dataset.rating = rating;
+      }
+
+      if (e.target.matches(".delete-review")) {
+        e.target.closest("li").remove();
+      }
+    });
+
+    document.addEventListener("submit", (e) => {
+      if (e.target.matches(".review-form")) {
+        e.preventDefault();
+        const form = e.target;
+        const input = form.querySelector("input");
+        const rating = parseInt(form.dataset.rating) || 0;
+        const reviewText = input.value.trim();
+        const list = form.closest(".review-section").querySelector(".review-list");
+
+        if (!reviewText) return;
+
+        const li = document.createElement("li");
+        const stars = "★".repeat(rating) + "☆".repeat(5 - rating);
+        li.innerHTML = `<strong>${stars}</strong> ${reviewText} <button class="delete-review" title="Delete Review">✕</button>`;
+        list.appendChild(li);
+
+        input.value = "";
+        form.dataset.rating = 0;
+        form.querySelectorAll(".star-rating span").forEach(span => span.classList.remove("selected"));
       }
     });
   </script>

@@ -5,7 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ASTRYX</title>
   <link rel="stylesheet" href="style.css">
-  
+  <style>
+    .review-section {
+      margin-top: 10px;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .review-section h4 {
+      margin: 0 0 5px;
+    }
+    .review-form {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+    }
+    .review-form input {
+      flex: 1;
+      padding: 5px;
+    }
+    .review-form button {
+      padding: 5px 10px;
+    }
+    .review-section ul {
+      padding-left: 20px;
+    }
+  </style>
 </head>
 <body>
 
@@ -16,10 +41,10 @@
   </div>
 
   <ul class="nav-menu">
-  <li><a href="index.html">Home</a></li>
-  <li><a href="search.html">Search</a></li>
-  <li><a href="login.html">Login</a></li>
-</ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="search.html">Search</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
 
   <form class="nav-search-form" id="searchForm">
     <input type="text" id="searchInput" placeholder="Search..." required />
@@ -27,79 +52,140 @@
   </form>
 </nav>
 
-  <header class="hero">
-    <video autoplay muted loop>
-      <source src="reel.mp4" type="video/mp4">
-      Your browser does not support the video encoder.
-    </video>
-    <div class="hero-content">
-      <h1>ASTRYX</h1>
-      <p>Sharing Stories That Stay With You</p>
-    </div>
-  </header>
+<header class="hero">
+  <video autoplay muted loop>
+    <source src="reel.mp4" type="video/mp4">
+    Your browser does not support the video encoder.
+  </video>
+  <div class="hero-content">
+    <h1>ASTRYX</h1>
+    <p>Sharing Stories That Stay With You</p>
+  </div>
+</header>
+
 <hr>
-  <footer>
-    <p>&copy; 2025 ASTRYX Films. All rights reserved.</p>
-  </footer>
-  <div id="searchResults" class="portfolio-grid"></div>
+
+<div id="searchResults" class="portfolio-grid"></div>
+
+<div class="review-section">
+  <h4>User Reviews</h4>
+  <ul class="review-list"></ul>
+
+  <form class="review-form">
+    <div class="star-rating">
+      <span data-rating="1">★</span>
+      <span data-rating="2">★</span>
+      <span data-rating="3">★</span>
+      <span data-rating="4">★</span>
+      <span data-rating="5">★</span>
+    </div>
+    <input type="text" placeholder="Write a review..." required />
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+<footer>
+  <p>&copy; 2025 ASTRYX Films. All rights reserved.</p>
+</footer>
 
 <script>
-    const apiKey = "2eca7df3b0a36b8a5275092058befc94";
+  const apiKey = "2eca7df3b0a36b8a5275092058befc94";
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get("q");
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get("q");
 
-    if (query) searchMovies(query);
+  if (query) searchMovies(query);
 
-    async function searchMovies(query) {
-      const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}`;
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        displayResults(data.results);
-      } catch (err) {
-        document.getElementById("searchResults").innerHTML = "<p>Error loading results.</p>";
-      }
+  async function searchMovies(query) {
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      displayResults(data.results);
+    } catch (err) {
+      document.getElementById("searchResults").innerHTML = "<p>Error loading results.</p>";
+    }
+  }
+
+  function displayResults(movies) {
+    const container = document.getElementById("searchResults");
+    container.innerHTML = "";
+
+    if (!movies.length) {
+      container.innerHTML = "<p>No results found.</p>";
+      return;
     }
 
-    function displayResults(movies) {
-      const container = document.getElementById("searchResults");
-      container.innerHTML = "";
+    movies.forEach(movie => {
+      const poster = movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : "https://via.placeholder.com/300x450?text=No+Image";
 
-      if (!movies.length) {
-        container.innerHTML = "<p>No results found.</p>";
-        return;
-      }
+      const reviewsKey = `reviews_${movie.id}`;
+      const existingReviews = JSON.parse(localStorage.getItem(reviewsKey)) || [];
 
-      movies.forEach(movie => {
-        const poster = movie.poster_path
-          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-          : "https://via.placeholder.com/300x450?text=No+Image";
-
-        const movieEl = document.createElement("div");
-        movieEl.className = "portfolio-item";
-        movieEl.innerHTML = `
-          <img src="${poster}" alt="${movie.title}" />
-          <h3>${movie.title}</h3>
-          <p>${movie.release_date || 'No release date'}</p>
-          <p>${movie.overview ? movie.overview.slice(0, 100) + '...' : 'No overview available.'}</p>
-        `;
-        container.appendChild(movieEl);
-      });
-    }
-
-    // Handle form submit from this page
-    const form = document.getElementById("searchForm");
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const input = document.getElementById("searchInput").value.trim();
-      if (input) {
-        window.location.href = `search.html?q=${encodeURIComponent(input)}`;
-      }
+      const movieEl = document.createElement("div");
+      movieEl.className = "portfolio-item";
+      movieEl.innerHTML = `
+        <img src="${poster}" alt="${movie.title}" />
+        <h3>${movie.title}</h3>
+        <p>${movie.release_date || 'No release date'}</p>
+        <p>${movie.overview ? movie.overview.slice(0, 100) + '...' : 'No overview available.'}</p>
+        
+        <div class="review-section">
+          <h4>User Reviews</h4>
+          <ul id="reviewList_${movie.id}">
+            ${existingReviews.map(r => `<li><strong>${r.username}</strong> (${r.date}): ${r.comment}</li>`).join("")}
+          </ul>
+          <form class="review-form" data-movie-id="${movie.id}">
+            <input type="text" placeholder="Write a review..." required />
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      `;
+      container.appendChild(movieEl);
     });
-  </script>
+
+    // Attach listeners to review forms
+    document.querySelectorAll(".review-form").forEach(form => {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const movieId = this.getAttribute("data-movie-id");
+        const input = this.querySelector("input");
+        const comment = input.value.trim();
+        if (!comment) return;
+
+        const review = {
+          username: "Anonymous", // You can enhance this with login info later
+          comment: comment,
+          date: new Date().toLocaleString()
+        };
+
+        const key = `reviews_${movieId}`;
+        const existing = JSON.parse(localStorage.getItem(key)) || [];
+        existing.push(review);
+        localStorage.setItem(key, JSON.stringify(existing));
+
+        const list = document.getElementById(`reviewList_${movieId}`);
+        const newReview = document.createElement("li");
+        newReview.innerHTML = `<strong>${review.username}</strong> (${review.date}): ${review.comment}`;
+        list.appendChild(newReview);
+
+        input.value = "";
+      });
+    });
+  }
+
+  // Handle search form submission
+  const form = document.getElementById("searchForm");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const input = document.getElementById("searchInput").value.trim();
+    if (input) {
+      window.location.href = `search.html?q=${encodeURIComponent(input)}`;
+    }
+  });
+</script>
 
 </body>
 </html>
-
-

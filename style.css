@@ -7,6 +7,85 @@
   box-sizing: border-box;
 }
 
+.review-section {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #1a1a1a;
+  border-radius: 10px;
+  border: 1px solid #333;
+}
+
+.review-section h4 {
+  margin-bottom: 0.5rem;
+}
+
+.review-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.review-list li {
+  padding: 0.5rem 1rem;
+  background: #222;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.delete-review {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #e50914;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.star-rating {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.star-rating span {
+  font-size: 1.5rem;
+  color: #444;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.star-rating span.selected {
+  color: #e50914;
+}
+
+.review-form input {
+  width: 100%;
+  padding: 0.5rem;
+  background: #111;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.review-form button {
+  background: #e50914;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.review-form button:hover {
+  background: #ff1f29;
+}
+
+
 html {
   scroll-behavior: smooth;
 }
